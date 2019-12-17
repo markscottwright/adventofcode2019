@@ -30,15 +30,15 @@ public class Day2 {
         int solution = 19690720;
         outer: while (v < 1_000_000) {
             for (noun = 0, verb = v; noun <= v; ++noun) {
-                long answer = new IntcodeComputer(input).set(1, noun).set(2, v)
-                        .run().get(0);
+                long answer = new IntcodeComputer(input).set(1, noun)
+                        .set(2, verb).run().get(0);
                 if (answer == solution) {
                     break outer;
                 }
             }
             for (noun = v, verb = 0; verb <= v; ++verb) {
-                long answer = new IntcodeComputer(input).set(1, v).set(2, verb)
-                        .run().get(0);
+                long answer = new IntcodeComputer(input).set(1, noun)
+                        .set(2, verb).run().get(0);
                 if (answer == solution) {
                     break outer;
                 }
