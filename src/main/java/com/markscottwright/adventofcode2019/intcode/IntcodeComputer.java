@@ -16,10 +16,10 @@ public class IntcodeComputer {
 
     private static final long POSITION_MODE = 0;
 
-    List<Long> instructions = new ArrayList<>();
+    private List<Long> instructions = new ArrayList<>();
     private int instructionPointer;
-    Iterator<Long> input = Collections.emptyIterator();
-    IntcodeOutput output = new InvalidOutput();
+    private Iterator<Long> input = Collections.emptyIterator();
+    private IntcodeOutput output = new InvalidOutput();
 
     public IntcodeComputer(List<Long> list) {
         this.instructions.addAll(list);
@@ -42,7 +42,7 @@ public class IntcodeComputer {
     public List<Long> run() throws IntcodeException {
 
         while (instructionPointer < instructions.size()) {
-            Long instruction = instructions.get(instructionPointer);
+            long instruction = instructions.get(instructionPointer);
             long opCode = instruction % 100;
             long aMode = (instruction / 100) % 10;
             long bMode = (instruction / 1000) % 10;
@@ -55,7 +55,8 @@ public class IntcodeComputer {
             // System.out.print(", bMode = " + bMode);
             // System.out.println(", cMode = " + cMode);
 
-            if (opCode == 1) {
+            // add/multiply
+            if (opCode == 1 || opCode == 2) {
                 Long a = instructions.get(instructionPointer + 1);
                 Long b = instructions.get(instructionPointer + 2);
                 Long c = instructions.get(instructionPointer + 3);
@@ -68,29 +69,23 @@ public class IntcodeComputer {
                 else
                     bVal = b;
                 assert (cMode == POSITION_MODE);
-                instructions.set(c.intValue(), aVal + bVal);
-                instructionPointer += 4;
-            } else if (opCode == 2) {
-                Long a = instructions.get(instructionPointer + 1);
-                Long b = instructions.get(instructionPointer + 2);
-                Long c = instructions.get(instructionPointer + 3);
-                if (aMode == POSITION_MODE)
-                    aVal = instructions.get(a.intValue());
+                if (opCode == 1)
+                    instructions.set(c.intValue(), aVal + bVal);
                 else
-                    aVal = a;
-                if (bMode == POSITION_MODE)
-                    bVal = instructions.get(b.intValue());
-                else
-                    bVal = b;
-                assert (cMode == POSITION_MODE);
-                instructions.set(c.intValue(), aVal * bVal);
+                    instructions.set(c.intValue(), aVal * bVal);
                 instructionPointer += 4;
-            } else if (opCode == 3) {
+            } 
+            
+            // input
+            else if (opCode == 3) {
                 Long a = instructions.get(instructionPointer + 1);
                 assert (aMode == POSITION_MODE);
                 instructions.set(a.intValue(), input.next());
                 instructionPointer += 2;
-            } else if (opCode == 4) {
+            } 
+            
+            // output
+            else if (opCode == 4) {
                 Long a = instructions.get(instructionPointer + 1);
                 if (aMode == POSITION_MODE)
                     aVal = instructions.get(a.intValue());
