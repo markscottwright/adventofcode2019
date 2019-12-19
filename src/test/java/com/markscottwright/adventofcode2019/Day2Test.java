@@ -1,11 +1,12 @@
 package com.markscottwright.adventofcode2019;
 
-import static com.markscottwright.adventofcode2019.IntcodeComputer.parse;
+import static com.markscottwright.adventofcode2019.intcode.IntcodeComputer.parse;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
-import com.markscottwright.adventofcode2019.IntcodeComputer.IntcodeException;
+import com.markscottwright.adventofcode2019.intcode.IntcodeComputer;
+import com.markscottwright.adventofcode2019.intcode.IntcodeComputer.IntcodeException;
 
 public class Day2Test {
 

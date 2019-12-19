@@ -2,7 +2,8 @@ package com.markscottwright.adventofcode2019;
 
 import java.util.List;
 
-import com.markscottwright.adventofcode2019.IntcodeComputer.IntcodeException;
+import com.markscottwright.adventofcode2019.intcode.IntcodeComputer;
+import com.markscottwright.adventofcode2019.intcode.IntcodeComputer.IntcodeException;
 
 public class Day2 {
     public static void main(String[] args) throws IntcodeException {
