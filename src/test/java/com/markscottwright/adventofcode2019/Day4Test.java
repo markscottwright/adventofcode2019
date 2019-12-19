@@ -1,7 +1,6 @@
 package com.markscottwright.adventofcode2019;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
