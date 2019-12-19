@@ -1,4 +1,4 @@
-package com.markscottwright.adventofcode2019.intcode;
+package com.markscottwright.adventofcode2019;
 
 import java.util.Objects;
 
