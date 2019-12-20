@@ -17,10 +17,23 @@ public class Day7 {
         long maxOutput = -1;
         while (phaseCodes.hasNext()) {
             var phaseCode = phaseCodes.next();
-            long output = new AmplifierSet(instructions, phaseCode.get(0), phaseCode.get(1),
-                    phaseCode.get(2), phaseCode.get(3), phaseCode.get(4)).run();
+            long output = new AmplifierSet(instructions, phaseCode.get(0),
+                    phaseCode.get(1), phaseCode.get(2), phaseCode.get(3),
+                    phaseCode.get(4)).run();
             maxOutput = Math.max(output, maxOutput);
         }
         System.out.println("Part 1: " + maxOutput);
+
+        PermutationIterator<Integer> phaseCodesForPart2 = new PermutationIterator<Integer>(
+                List.of(5, 6, 7, 8, 9));
+        maxOutput = -1;
+        while (phaseCodesForPart2.hasNext()) {
+            var phaseCode = phaseCodesForPart2.next();
+            long output = new AmplifierSet(instructions, phaseCode.get(0),
+                    phaseCode.get(1), phaseCode.get(2), phaseCode.get(3),
+                    phaseCode.get(4)).run();
+            maxOutput = Math.max(output, maxOutput);
+        }
+        System.out.println("Part 2: " + maxOutput);
     }
 }

@@ -1,5 +1,6 @@
 package com.markscottwright.adventofcode2019.intcode;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,6 +17,12 @@ public class IntcodeComputer {
 
     private static final long POSITION_MODE = 0;
 
+    public enum State {
+        halted, waiting
+    };
+
+    private State state = State.waiting;
+    private boolean pauseWhenInputEmpty = false;
     private List<Long> instructions = new ArrayList<>();
     private int instructionPointer;
     private Iterator<Long> input = Collections.emptyIterator();
@@ -40,6 +47,13 @@ public class IntcodeComputer {
     }
 
     public List<Long> run() throws IntcodeException {
+        runUntilInputEmpty();
+        return instructions;
+    }
+
+    public State runUntilInputEmpty() throws IntcodeException {
+        if (state == State.halted)
+            return state;
 
         while (instructionPointer < instructions.size()) {
             long instruction = instructions.get(instructionPointer);
@@ -74,16 +88,21 @@ public class IntcodeComputer {
                 else
                     instructions.set(c.intValue(), aVal * bVal);
                 instructionPointer += 4;
-            } 
-            
+            }
+
             // input
             else if (opCode == 3) {
+                if (pauseWhenInputEmpty && !input.hasNext()) {
+                    state = State.waiting;
+                    return state;
+                }
+
                 Long a = instructions.get(instructionPointer + 1);
                 assert (aMode == POSITION_MODE);
                 instructions.set(a.intValue(), input.next());
                 instructionPointer += 2;
-            } 
-            
+            }
+
             // output
             else if (opCode == 4) {
                 Long a = instructions.get(instructionPointer + 1);
@@ -141,7 +160,9 @@ public class IntcodeComputer {
                         + instructions.get(instructionPointer) + " at "
                         + instructionPointer);
         }
-        return instructions;
+
+        state = State.halted;
+        return state;
     }
 
     public static List<Long> parse(String input) {
@@ -151,5 +172,20 @@ public class IntcodeComputer {
 
     public List<Long> getInstructions() {
         return instructions;
+    }
+
+    public void setPauseWhenInputEmpty(boolean pauseWhenInputEmpty) {
+        this.pauseWhenInputEmpty = pauseWhenInputEmpty;
+    }
+
+    public boolean isHalted() {
+        return state == State.halted;
+    }
+
+    public void printCurrentStateOn(PrintStream out) {
+        out.println("state:" + state);
+        out.println("  instructionPointer:" + instructionPointer);
+        out.println("  input:" + input.toString());
+        out.println("  output:" + output.toString());
     }
 }

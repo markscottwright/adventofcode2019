@@ -1,10 +1,9 @@
 package com.markscottwright.adventofcode2019;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
-import com.markscottwright.adventofcode2019.intcode.CollectingOutput;
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer;
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer.IntcodeException;
 import com.markscottwright.adventofcode2019.intcode.IntcodeOutput;
@@ -16,63 +15,76 @@ public class AmplifierSet {
     private IntcodeComputer c;
     private IntcodeComputer d;
     private IntcodeComputer e;
-    private CollectingOutput eOutput;
+    private Pipe pipe0;
 
     /**
      * This class feeds the output from a previous run to the input of the next
-     * run
+     * run, with an initial value.
      */
-    static class PhaseAndPreviousOutput
-            implements IntcodeOutput, Iterator<Long> {
-        private long phase;
-        private Long previousOutput = null;
-        int pos = 0;
+    public static class Pipe implements IntcodeOutput, Iterator<Long> {
+        private LinkedList<Long> values = new LinkedList<>();
 
-        public PhaseAndPreviousOutput(long phase) {
-            this.phase = phase;
+        public Pipe(long initialValue) {
+            values.add(initialValue);
         }
 
         @Override
         public boolean hasNext() {
-            return pos < 2;
+            return !values.isEmpty();
         }
 
         @Override
         public Long next() {
-            pos++;
-            if (pos == 1)
-                return phase;
-            else
-                return previousOutput;
+            return values.pop();
         }
 
         @Override
         public void put(long aVal) {
-            previousOutput = aVal;
+            values.add(aVal);
+        }
+
+        long valueInPipe() {
+            return values.pop();
+        }
+
+        @Override
+        public String toString() {
+            return values.toString();
         }
 
     }
 
     public AmplifierSet(List<Long> instructions, Integer... phaseSettings) {
-        var aOutput = new PhaseAndPreviousOutput(phaseSettings[1]);
-        var bOutput = new PhaseAndPreviousOutput(phaseSettings[2]);
-        var cOutput = new PhaseAndPreviousOutput(phaseSettings[3]);
-        var dOutput = new PhaseAndPreviousOutput(phaseSettings[4]);
-        eOutput = new CollectingOutput();
-        a = new IntcodeComputer(instructions,
-                List.of((long) phaseSettings[0], 0L).iterator(), aOutput);
-        b = new IntcodeComputer(instructions, aOutput, bOutput);
-        c = new IntcodeComputer(instructions, bOutput, cOutput);
-        d = new IntcodeComputer(instructions, cOutput, dOutput);
-        e = new IntcodeComputer(instructions, dOutput, eOutput);
+        pipe0 = new Pipe(phaseSettings[0]);
+
+        // initial value into amplifier set
+        pipe0.put(0);
+
+        var pipe1 = new Pipe(phaseSettings[1]);
+        var pipe2 = new Pipe(phaseSettings[2]);
+        var pipe3 = new Pipe(phaseSettings[3]);
+        var pipe4 = new Pipe(phaseSettings[4]);
+        a = new IntcodeComputer(instructions, pipe0, pipe1);
+        b = new IntcodeComputer(instructions, pipe1, pipe2);
+        c = new IntcodeComputer(instructions, pipe2, pipe3);
+        d = new IntcodeComputer(instructions, pipe3, pipe4);
+        e = new IntcodeComputer(instructions, pipe4, pipe0);
+        a.setPauseWhenInputEmpty(true);
+        b.setPauseWhenInputEmpty(true);
+        c.setPauseWhenInputEmpty(true);
+        d.setPauseWhenInputEmpty(true);
+        e.setPauseWhenInputEmpty(true);
     }
 
     long run() throws IntcodeException {
-        a.run();
-        b.run();
-        c.run();
-        d.run();
-        e.run();
-        return eOutput.getLastValue();
+        while (!a.isHalted() && !b.isHalted() && !c.isHalted() && !d.isHalted()
+                && !e.isHalted()) {
+            a.runUntilInputEmpty();
+            b.runUntilInputEmpty();
+            c.runUntilInputEmpty();
+            d.runUntilInputEmpty();
+            e.runUntilInputEmpty();
+        }
+        return pipe0.valueInPipe();
     }
 }
