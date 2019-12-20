@@ -12,7 +12,7 @@ public class Day2 {
         List<Long> input = IntcodeComputer.parse(inputString);
 
         IntcodeComputer computer = new IntcodeComputer(input);
-        Long part1 = computer.set(1, 12).set(2, 2).run().get(0);
+        Long part1 = computer.set(1, 12).set(2, 2).run().get(0L);
         System.out.println("Part 1: " + part1);
 
         // Expand our "box" of noun,verb one at a time, testing the "edges".
@@ -32,14 +32,14 @@ public class Day2 {
         outer: while (v < 1_000_000) {
             for (noun = 0, verb = v; noun <= v; ++noun) {
                 long answer = new IntcodeComputer(input).set(1, noun)
-                        .set(2, verb).run().get(0);
+                        .set(2, verb).run().get(0L);
                 if (answer == solution) {
                     break outer;
                 }
             }
             for (noun = v, verb = 0; verb <= v; ++verb) {
                 long answer = new IntcodeComputer(input).set(1, noun)
-                        .set(2, verb).run().get(0);
+                        .set(2, verb).run().get(0L);
                 if (answer == solution) {
                     break outer;
                 }
