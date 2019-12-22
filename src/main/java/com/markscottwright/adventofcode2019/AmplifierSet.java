@@ -1,12 +1,10 @@
 package com.markscottwright.adventofcode2019;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer;
+import com.markscottwright.adventofcode2019.intcode.Pipe;
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer.IntcodeException;
-import com.markscottwright.adventofcode2019.intcode.IntcodeOutput;
 
 public class AmplifierSet {
 
@@ -16,43 +14,6 @@ public class AmplifierSet {
     private IntcodeComputer d;
     private IntcodeComputer e;
     private Pipe pipe0;
-
-    /**
-     * This class feeds the output from a previous run to the input of the next
-     * run, with an initial value.
-     */
-    public static class Pipe implements IntcodeOutput, Iterator<Long> {
-        private LinkedList<Long> values = new LinkedList<>();
-
-        public Pipe(long initialValue) {
-            values.add(initialValue);
-        }
-
-        @Override
-        public boolean hasNext() {
-            return !values.isEmpty();
-        }
-
-        @Override
-        public Long next() {
-            return values.pop();
-        }
-
-        @Override
-        public void put(long aVal) {
-            values.add(aVal);
-        }
-
-        long valueInPipe() {
-            return values.pop();
-        }
-
-        @Override
-        public String toString() {
-            return values.toString();
-        }
-
-    }
 
     public AmplifierSet(List<Long> instructions, Integer... phaseSettings) {
         pipe0 = new Pipe(phaseSettings[0]);
@@ -85,6 +46,6 @@ public class AmplifierSet {
             d.runUntilInputEmpty();
             e.runUntilInputEmpty();
         }
-        return pipe0.valueInPipe();
+        return pipe0.firstValueInPipe();
     }
 }

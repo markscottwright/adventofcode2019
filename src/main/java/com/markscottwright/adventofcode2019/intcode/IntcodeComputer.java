@@ -3,7 +3,6 @@ package com.markscottwright.adventofcode2019.intcode;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ public class IntcodeComputer {
 
     private State state = State.waiting;
     private boolean pauseWhenInputEmpty = false;
-    private HashMap<Long, Long> instructions = new HashMap<>();
+    private IntcodeMemory instructions = new IntcodeMemory();
     private long instructionPointer;
     private long relativeBase = 0;
     private Iterator<Long> input = Collections.emptyIterator();
@@ -32,25 +31,25 @@ public class IntcodeComputer {
 
     public IntcodeComputer(List<Long> list) {
         for (int i = 0; i < list.size(); ++i)
-            this.instructions.put((long) i, list.get(i));
+            this.instructions.put(i, list.get(i));
         this.instructionPointer = 0;
     }
 
     public IntcodeComputer(List<Long> list, Iterator<Long> input,
             IntcodeOutput output) {
         for (int i = 0; i < list.size(); ++i)
-            this.instructions.put((long) i, list.get(i));
+            this.instructions.put(i, list.get(i));
         this.instructionPointer = 0;
         this.input = input;
         this.output = output;
     }
 
     public IntcodeComputer set(int pos, long newVal) {
-        instructions.put((long) pos, newVal);
+        instructions.put(pos, newVal);
         return this;
     }
 
-    public HashMap<Long, Long> run() throws IntcodeException {
+    public IntcodeMemory run() throws IntcodeException {
         runUntilInputEmpty();
         return instructions;
     }
@@ -79,18 +78,20 @@ public class IntcodeComputer {
                 Long b = instructions.get(instructionPointer + 2);
                 Long c = instructions.get(instructionPointer + 3);
                 if (aMode == POSITION_MODE)
-                    aVal = instructions.getOrDefault(a, 0L);
+                    aVal = instructions.get(a);
                 else if (aMode == RELATIVE_MODE)
-                    aVal = instructions.getOrDefault(relativeBase + a, 0L);
+                    aVal = instructions.get(relativeBase + a);
                 else
                     aVal = a;
                 if (bMode == POSITION_MODE)
-                    bVal = instructions.getOrDefault(b, 0L);
+                    bVal = instructions.get(b);
                 else if (bMode == RELATIVE_MODE)
-                    bVal = instructions.getOrDefault(relativeBase + b, 0L);
+                    bVal = instructions.get(relativeBase + b);
                 else
                     bVal = b;
-                assert (cMode == POSITION_MODE);
+                if (cMode == RELATIVE_MODE)
+                    c = relativeBase + c;
+                assert (cMode == POSITION_MODE || cMode == RELATIVE_MODE);
                 if (opCode == 1)
                     instructions.put(c, aVal + bVal);
                 else
@@ -106,12 +107,10 @@ public class IntcodeComputer {
                 }
 
                 if (aMode == POSITION_MODE) {
-                    Long a = instructions.getOrDefault(instructionPointer + 1,
-                            0L);
+                    Long a = instructions.get(instructionPointer + 1);
                     instructions.put(a, input.next());
                 } else if (aMode == RELATIVE_MODE) {
-                    Long a = instructions.getOrDefault(instructionPointer + 1,
-                            0L);
+                    Long a = instructions.get(instructionPointer + 1);
                     instructions.put(relativeBase + a, input.next());
                 }
                 assert (aMode == POSITION_MODE || aMode == RELATIVE_MODE);
@@ -120,12 +119,11 @@ public class IntcodeComputer {
 
             // output
             else if (opCode == 4) {
-                Long a = instructions.getOrDefault(instructionPointer + 1, 0L);
+                Long a = instructions.get(instructionPointer + 1);
                 if (aMode == POSITION_MODE)
-                    aVal = instructions.getOrDefault(a, 0L);
+                    aVal = instructions.get(a);
                 else if (aMode == RELATIVE_MODE)
-                    aVal = instructions
-                            .getOrDefault(a.intValue() + relativeBase, 0L);
+                    aVal = instructions.get(a.intValue() + relativeBase);
                 else
                     aVal = a;
                 output.put(aVal);
@@ -137,17 +135,15 @@ public class IntcodeComputer {
                 Long a = instructions.get(instructionPointer + 1);
                 Long b = instructions.get(instructionPointer + 2);
                 if (aMode == POSITION_MODE)
-                    aVal = instructions.getOrDefault(a, 0L);
+                    aVal = instructions.get(a);
                 else if (aMode == RELATIVE_MODE)
-                    aVal = instructions
-                            .getOrDefault(relativeBase + a.intValue(), 0L);
+                    aVal = instructions.get(relativeBase + a.intValue());
                 else
                     aVal = a;
                 if (bMode == POSITION_MODE)
-                    bVal = instructions.getOrDefault(b, 0L);
+                    bVal = instructions.get(b);
                 else if (bMode == RELATIVE_MODE)
-                    bVal = instructions
-                            .getOrDefault(relativeBase + b.intValue(), 0L);
+                    bVal = instructions.get(relativeBase + b.intValue());
                 else
                     bVal = b;
                 if (opCode == 5 && aVal != 0 || opCode == 6 && aVal == 0)
@@ -162,19 +158,19 @@ public class IntcodeComputer {
                 Long b = instructions.get(instructionPointer + 2);
                 Long c = instructions.get(instructionPointer + 3);
                 if (aMode == POSITION_MODE)
-                    aVal = instructions.getOrDefault(a, 0L);
+                    aVal = instructions.get(a);
                 else if (aMode == RELATIVE_MODE)
-                    aVal = instructions
-                            .getOrDefault(relativeBase + a.intValue(), 0L);
+                    aVal = instructions.get(relativeBase + a.intValue());
                 else
                     aVal = a;
                 if (bMode == POSITION_MODE)
-                    bVal = instructions.getOrDefault(b, 0L);
+                    bVal = instructions.get(b);
                 else if (bMode == RELATIVE_MODE)
-                    bVal = instructions
-                            .getOrDefault(relativeBase + b.intValue(), 0L);
+                    bVal = instructions.get(relativeBase + b.intValue());
                 else
                     bVal = b;
+                if (cMode == RELATIVE_MODE)
+                    c = relativeBase + c;
                 assert (cMode == POSITION_MODE || cMode == RELATIVE_MODE);
                 if (opCode == 7 && aVal < bVal || opCode == 8 && aVal == bVal)
                     instructions.put(c, 1L);
@@ -187,9 +183,9 @@ public class IntcodeComputer {
             else if (opCode == 9) {
                 Long a = instructions.get(instructionPointer + 1);
                 if (aMode == POSITION_MODE)
-                    aVal = instructions.getOrDefault(a, 0L);
+                    aVal = instructions.get(a);
                 else if (aMode == RELATIVE_MODE)
-                    aVal = instructions.getOrDefault(relativeBase + a, 0L);
+                    aVal = instructions.get(relativeBase + a);
                 else
                     aVal = a;
                 relativeBase += aVal;
@@ -213,7 +209,7 @@ public class IntcodeComputer {
                 .collect(Collectors.toList());
     }
 
-    public HashMap<Long, Long> getInstructions() {
+    public IntcodeMemory getInstructions() {
         return instructions;
     }
 
