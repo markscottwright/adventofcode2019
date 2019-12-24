@@ -31,7 +31,7 @@ public class IntcodeMemory {
         if (lastIndex > 10000)
             throw new RuntimeException("Cant make array of:" + lastIndex);
         ArrayList<Long> out = new ArrayList<>((int) lastIndex);
-        for (int i = 0; i <= lastIndex; ++i)
+        for (long i = 0; i <= lastIndex; ++i)
             out.add(memory.getOrDefault(i, 0L));
         return out;
     }

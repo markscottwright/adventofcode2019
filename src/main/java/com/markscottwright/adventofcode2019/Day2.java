@@ -13,7 +13,7 @@ public class Day2 {
 
         IntcodeComputer computer = new IntcodeComputer(input);
         Long part1 = computer.set(1, 12).set(2, 2).run().get(0L);
-        System.out.println("Part 1: " + part1);
+        System.out.println("Day 2 Part 1: " + part1);
 
         // Expand our "box" of noun,verb one at a time, testing the "edges".
         // like:
@@ -46,6 +46,6 @@ public class Day2 {
             }
             v++;
         }
-        System.out.println("Part 2: " + (noun * 100 + verb));
+        System.out.println("Day 2 Part 2: " + (noun * 100 + verb));
     }
 }
