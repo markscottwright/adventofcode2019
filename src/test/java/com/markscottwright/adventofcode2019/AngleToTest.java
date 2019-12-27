@@ -1,7 +1,6 @@
 package com.markscottwright.adventofcode2019;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -28,7 +27,6 @@ public class AngleToTest {
         for (int i = 0; i < points.length - 1; ++i) {
             Angle angle1 = origin.angleTo(points[i]);
             Angle angle2 = origin.angleTo(points[i + 1]);
-            System.out.println(angle1 + "<" + angle2 + " = " + angle1.compareTo(angle2));
             assertThat(angle1).isLessThan(angle2);
         }
     }

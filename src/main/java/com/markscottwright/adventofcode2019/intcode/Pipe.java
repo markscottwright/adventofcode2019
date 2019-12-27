@@ -3,7 +3,6 @@ package com.markscottwright.adventofcode2019.intcode;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.IntPredicate;
 
 /**
  * This class feeds the output from a previous run to the input of the next

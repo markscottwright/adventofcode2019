@@ -3,7 +3,6 @@ package com.markscottwright.adventofcode2019;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -87,7 +86,6 @@ class AsteroidSet {
 
     public Position bestMonitoringPosition() {
         int mostDetected = 0;
-        Set<Position> largestSet = null;
         Position bestAsteroid = null;
         for (Position asteroid : asteroids) {
             Set<Position> asteroidsDetectibleBy = asteroidsDetectableBy(
@@ -96,7 +94,6 @@ class AsteroidSet {
             if (numDetected > mostDetected) {
                 mostDetected = numDetected;
                 bestAsteroid = asteroid;
-                largestSet = asteroidsDetectibleBy;
             }
         }
 
