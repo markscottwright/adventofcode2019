@@ -23,12 +23,12 @@ public class Day8 {
 
         int part1Solution = countOf('1', layerWithFewestZeros)
                 * countOf('2', layerWithFewestZeros);
-        System.out.println("Part 1: " + part1Solution);
+        System.out.println("Day 8 part 1: " + part1Solution);
 
         // part 2
         var finalOutput = Layer.parse(25, 6, INPUT).stream()
                 .reduce((l1, l2) -> l1.overlay(l2)).get();
-        System.out.println("Part 2:");
+        System.out.println("Day 8 part 2:");
         finalOutput.printOn(System.out);
     }
 }

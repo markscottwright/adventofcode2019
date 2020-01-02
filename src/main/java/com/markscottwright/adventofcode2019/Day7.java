@@ -22,7 +22,7 @@ public class Day7 {
                     phaseCode.get(4)).run();
             maxOutput = Math.max(output, maxOutput);
         }
-        System.out.println("Part 1: " + maxOutput);
+        System.out.println("Day 7 part 1: " + maxOutput);
 
         PermutationIterator<Integer> phaseCodesForPart2 = new PermutationIterator<Integer>(
                 List.of(5, 6, 7, 8, 9));
@@ -34,6 +34,6 @@ public class Day7 {
                     phaseCode.get(4)).run();
             maxOutput = Math.max(output, maxOutput);
         }
-        System.out.println("Part 2: " + maxOutput);
+        System.out.println("Day 7 part 2: " + maxOutput);
     }
 }

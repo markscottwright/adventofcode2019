@@ -80,12 +80,12 @@ public class Day3 {
 
         int partOneSolution = wire1Positions.stream()
                 .mapToInt(p1 -> p1.manhattanDistance(zero)).min().getAsInt();
-        System.out.println("Part 1:" + partOneSolution);
+        System.out.println("Day 3 part 1:" + partOneSolution);
         
         int partTwoSolution = wire1Positions.stream()
                 .mapToInt(p1 -> wire1StepsToPosition.get(p1)
                         + wire2StepsToPosition.get(p1))
                 .min().getAsInt();
-        System.out.println("Part 2:" + partTwoSolution);
+        System.out.println("Day 3 part 2:" + partTwoSolution);
     }
 }

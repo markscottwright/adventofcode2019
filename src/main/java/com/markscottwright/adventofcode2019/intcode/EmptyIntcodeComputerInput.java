@@ -1,4 +1,4 @@
-package com.markscottwright.adventofcode2019;
+package com.markscottwright.adventofcode2019.intcode;
 
 import java.util.Iterator;
 

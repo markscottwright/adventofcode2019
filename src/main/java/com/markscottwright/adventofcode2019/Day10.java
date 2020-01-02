@@ -40,14 +40,14 @@ public class Day10 {
             // @formatter:on
 
     public static void main(String[] args) {
-        System.out.print("Part 1: ");
+        System.out.print("Day 10 part 1: ");
 
         AsteroidSet asteroids = new AsteroidSet(INPUT);
         var pos = asteroids.bestMonitoringPosition();
         System.out.println(
                 asteroids.asteroidsVisibleFromBestMonitoringPosition());
 
-        System.out.print("Part 2: ");
+        System.out.print("Day 10 part 2: ");
         var laserPlan = asteroids.asteroidsAtAngleFrom(pos);
         int blastedAsteroids = 0;
         sweepLaser: while (true) {

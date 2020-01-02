@@ -1230,10 +1230,10 @@ public class Day6 {
         HashMap<String, Orbit> orbits = parse(INPUT);
         int orbitsCount = orbits.values().stream()
                 .mapToInt(Orbit::numDirectAndIndirectOrbits).sum();
-        System.out.println("Part 1: " + orbitsCount);
+        System.out.println("Day 6 part 1: " + orbitsCount);
 
         int distanceToSanta = move(new HashSet<>(orbits.values()),
                 orbits.get("YOU").orbit.id, orbits.get("SAN").orbit.id);
-        System.out.println("Part 2: " + distanceToSanta);
+        System.out.println("Day 6 part 2: " + distanceToSanta);
     }
 }

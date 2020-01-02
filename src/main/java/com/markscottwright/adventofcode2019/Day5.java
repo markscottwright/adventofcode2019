@@ -14,12 +14,12 @@ public class Day5 {
         CollectingOutput output = new CollectingOutput();
         new IntcodeComputer(instructions, List.of(1L).iterator(),
                 output).run();
-        System.out.println("part 1: " + output.getLastValue());
+        System.out.println("Day 5 part 1: " + output.getLastValue());
         
         output = new CollectingOutput();
         new IntcodeComputer(instructions, List.of(5L).iterator(),
                 output).run();
-        System.out.println("part 2: " + output.getLastValue());
+        System.out.println("Day 5 part 2: " + output.getLastValue());
 
     }
 }

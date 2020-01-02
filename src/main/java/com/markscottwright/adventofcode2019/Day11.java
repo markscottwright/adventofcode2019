@@ -9,7 +9,7 @@ public class Day11 {
     public static void main(String[] args) throws IntcodeException {
         var instructions = IntcodeComputer.parse(INPUT);
 
-        System.out.println("Day 11 Part 1:");
+        System.out.print("Day 11 Part 1: ");
         EmergencyHullPaintingRobot robot = new EmergencyHullPaintingRobot();
         new IntcodeComputer(instructions, robot, robot).run();
         System.out.println(robot.numberOfPanelsPainted());

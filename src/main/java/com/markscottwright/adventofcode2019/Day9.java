@@ -14,12 +14,12 @@ public class Day9 {
         
         Pipe part1Output = new Pipe();
         new IntcodeComputer(instructions, List.of(1L).iterator(), part1Output).run();
-        System.out.print("Part 1: ");
+        System.out.print("Day 9 part 1: ");
         System.out.println(part1Output);
         
         Pipe part2Output = new Pipe();
         new IntcodeComputer(instructions, List.of(2L).iterator(), part2Output).run();
-        System.out.print("Part 2: ");
+        System.out.print("Day 9 part 2: ");
         System.out.println(part2Output);
     }
 }

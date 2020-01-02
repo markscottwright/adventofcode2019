@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
 
+import com.markscottwright.adventofcode2019.intcode.EmptyIntcodeComputerInput;
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer;
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer.IntcodeException;
 import com.markscottwright.adventofcode2019.intcode.IntcodeOutput;
@@ -158,19 +159,15 @@ public class Day13 {
 
     public static void main(String[] args) throws IntcodeException {
         var instructions = IntcodeComputer.parse(INPUT);
-        System.out.println("Day 13 part 1: ");
+        System.out.print("Day 13 part 1: ");
         BlockTileCounter output = new BlockTileCounter();
         new IntcodeComputer(instructions, new EmptyIntcodeComputerInput(),
                 output).run();
         System.out.println(output.numBlockTiles());
 
-        System.out.println("Day 13 part : ");
+        System.out.print("Day 13 part 2: ");
         var instructions2 = new ArrayList<Long>(instructions);
         instructions2.set(0, 2L); // infinite plays
-        // Sadly, no reason to actually show a window..
-        // var display = new Day13GameDisplay(instructions2);
-        // display.setVisible(true);
-
         var robot = new GamePlayingRobot();
         new IntcodeComputer(instructions2, robot, robot).run();
         System.out.println(robot.getScore());

@@ -9,7 +9,7 @@ public class Day4 {
             if (hasDouble(digits) && doesntDecrease(digits))
                 part1Solution++;
         }
-        System.out.println("Part 1: " + part1Solution);
+        System.out.println("Day 4 Part 1: " + part1Solution);
 
         int part2Solution = 0;
         for (int i = 197487; i < 673251; ++i) {
@@ -17,7 +17,7 @@ public class Day4 {
             if (hasDoubleNotPartOfLargerGroup(digits) && doesntDecrease(digits))
                 part2Solution++;
         }
-        System.out.println("Part 2: " + part2Solution);
+        System.out.println("Day 4 Part 2: " + part2Solution);
     }
 
     private static boolean hasDoubleNotPartOfLargerGroup(int[] digits) {

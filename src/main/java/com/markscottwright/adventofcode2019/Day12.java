@@ -8,7 +8,7 @@ import org.apache.commons.math3.util.ArithmeticUtils;
 
 public class Day12 {
     public static void main(String[] args) {
-        System.out.println("Day 12 part 1: ");
+        System.out.print("Day 12 part 1: ");
 
         var moons = Moon.parse(
         //@formatter:off
@@ -29,7 +29,7 @@ public class Day12 {
         // find how many times until the system repeats on each axis. The lowest
         // common multiple of each of those repeating periods is how often the
         // system itself repeats (and our answer)
-        System.out.println("Day 12 part 2: ");
+        System.out.print("Day 12 part 2: ");
         int maxCollected = 1_000_000;
         int[] xVals = new int[maxCollected];
         int[] yVals = new int[maxCollected];
