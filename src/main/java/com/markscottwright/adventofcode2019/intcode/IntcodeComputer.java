@@ -44,6 +44,9 @@ public class IntcodeComputer {
         this.output = output;
     }
 
+    private IntcodeComputer() {
+    }
+
     public IntcodeComputer set(int pos, long newVal) {
         instructions.put(pos, newVal);
         return this;
@@ -204,6 +207,24 @@ public class IntcodeComputer {
         return state;
     }
 
+    /**
+     * Much like forking a process, this makes a copy of the current state, but
+     * leaves the I/O connected to the same object.
+     * 
+     * @return A copy of the current state of this process
+     */
+    public IntcodeComputer copy() {
+        var out = new IntcodeComputer();
+        out.input = input;
+        out.output = output;
+        out.instructionPointer = instructionPointer;
+        out.instructions = instructions.copy();
+        out.pauseWhenInputEmpty = pauseWhenInputEmpty;
+        out.relativeBase = relativeBase;
+        out.state = state;
+        return out;
+    }
+    
     public static List<Long> parse(String input) {
         return Arrays.stream(input.split(",")).map(Long::parseLong)
                 .collect(Collectors.toList());
@@ -226,5 +247,12 @@ public class IntcodeComputer {
         out.println("  instructionPointer:" + instructionPointer);
         out.println("  input:" + input.toString());
         out.println("  output:" + output.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "IntcodeComputer [state=" + state + ", pauseWhenInputEmpty="
+                + pauseWhenInputEmpty + ", instructionPointer="
+                + instructionPointer + ", relativeBase=" + relativeBase + "]";
     }
 }

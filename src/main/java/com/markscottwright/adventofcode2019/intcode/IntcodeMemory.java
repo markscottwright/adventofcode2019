@@ -48,4 +48,12 @@ public class IntcodeMemory {
     public long size() {
         return size;
     }
+
+    @SuppressWarnings("unchecked")
+    public IntcodeMemory copy() {
+        var out = new IntcodeMemory();
+        out.memory = (HashMap<Long, Long>) memory.clone();
+        out.size = size;
+        return out;
+    }
 }
