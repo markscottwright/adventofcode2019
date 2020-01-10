@@ -5,10 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -94,7 +98,7 @@ public class Day13GameDisplay extends JFrame
                     new Dimension(gameScreen.getWidthInPixels(),
                             gameScreen.getHeightInPixels()));
             pack();
-            Timer gameTimer = new Timer(TICK_MILLISECONDS, this);
+            gameTimer = new Timer(TICK_MILLISECONDS, this);
             gameTimer.setInitialDelay(0);
             gameTimer.start();
         } catch (IntcodeException e) {
@@ -116,6 +120,9 @@ public class Day13GameDisplay extends JFrame
     private IntcodeComputer gameLogic;
     int ballX = 0;
     int paddleX = 0;
+    private int screenshotNum = 0;
+    private ArrayList<BufferedImage> screenshots = new ArrayList<>();
+    private Timer gameTimer;
 
     /**
      * Process output from the gameLogic IntcodeComputer
@@ -180,11 +187,42 @@ public class Day13GameDisplay extends JFrame
                 joystickInput = 1L;
             else
                 joystickInput = 0L;
-            gameLogic.runUntilInputEmpty();
+            boolean done = (gameLogic
+                    .runUntilInputEmpty() == IntcodeComputer.State.halted);
             gameScreen.paintImmediately(gameScreen.getX(), gameScreen.getY(),
                     gameScreen.getWidth(), gameScreen.getHeight());
+            screenshot(screenshotNum++);
+
+            if (done) {
+                gameTimer.stop();
+                writeAnimatedGif("day13.gif");
+            }
         } catch (IntcodeException e1) {
         }
+    }
+
+    private void writeAnimatedGif(String string) {
+        try (FileImageOutputStream output = new FileImageOutputStream(
+                new File("day13.gif"));) {
+            GifSequenceWriter writer = new GifSequenceWriter(output,
+                    screenshots.get(0).getType(), 1, false);
+            int i = 0;
+            for (var screenshot : screenshots) {
+                System.out.println(i + "/" + screenshots.size());
+                writer.writeToSequence(screenshot);
+                i++;
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void screenshot(int i) {
+        BufferedImage img = new BufferedImage(getWidth(), getHeight(),
+                BufferedImage.TYPE_INT_RGB);
+        paint(img.getGraphics());
+        screenshots.add(img);
     }
 
     public static void main(String[] args) {
