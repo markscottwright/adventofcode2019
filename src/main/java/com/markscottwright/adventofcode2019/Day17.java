@@ -4,7 +4,6 @@ import static java.lang.String.join;
 import static org.apache.commons.lang3.StringUtils.join;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -214,9 +213,7 @@ public class Day17 {
 		}
 
 		/**
-		 * TODO - change this to a path-producer and enumerate all possible robot paths.
-		 * The easiest path can't be represented in a main plus repeating A,B,C
-		 * functions.
+		 * Naive "proceed as far as you can" algorithm is sufficient.
 		 */
 		ArrayList<String> getCompleteRobotPath() {
 			ArrayList<String> path = new ArrayList<>();
@@ -339,7 +336,7 @@ public class Day17 {
 			if (results != null)
 				return results;
 			else {
-				removeLast(mainRoutine);
+				mainRoutine.remove(mainRoutine.size() - 1);
 			}
 		}
 		if (startsWith(path, functionB)) {
@@ -349,7 +346,7 @@ public class Day17 {
 			if (results != null)
 				return results;
 			else {
-				removeLast(mainRoutine);
+				mainRoutine.remove(mainRoutine.size() - 1);
 			}
 		}
 		if (startsWith(path, functionC)) {
@@ -359,12 +356,11 @@ public class Day17 {
 			if (results != null)
 				return results;
 			else {
-				removeLast(mainRoutine);
+				mainRoutine.remove(mainRoutine.size() - 1);
 			}
 		}
 
 		if (functionA.isEmpty()) {
-			// mainRoutine.add("A");
 			for (int i = 1; i < 20; ++i) {
 				if (i >= path.size())
 					continue;
@@ -373,11 +369,9 @@ public class Day17 {
 					return results;
 			}
 			functionA.clear();
-			// removeLast(mainRoutine);
 		}
 
 		else if (functionB.isEmpty()) {
-			// mainRoutine.add("B");
 			for (int i = 1; i < 20; ++i) {
 				if (i >= path.size())
 					continue;
@@ -386,11 +380,9 @@ public class Day17 {
 				if (results != null)
 					return results;
 			}
-			// removeLast(mainRoutine);
 		}
 
 		else if (functionC.isEmpty()) {
-			// mainRoutine.add("C");
 			for (int i = 1; i < 20; ++i) {
 				if (i >= path.size())
 					continue;
@@ -398,14 +390,9 @@ public class Day17 {
 				if (results != null)
 					return results;
 			}
-			// removeLast(mainRoutine);
 		}
 
 		return null;
-	}
-
-	private static void removeLast(ArrayList<String> list) {
-		list.remove(list.size() - 1);
 	}
 
 	private static boolean startsWith(List<String> path, List<String> possiblePrefix) {
