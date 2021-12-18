@@ -141,7 +141,7 @@ public class Day17 {
 				}
 			}
 
-			MapLocation forward(MapLocation pos, int distance) {
+			MapLocation forwardFrom(MapLocation pos, int distance) {
 				switch (this) {
 				case DOWN:
 					return pos.moveDown(distance);
@@ -223,17 +223,17 @@ public class Day17 {
 				int distance = proceedForward(pos, dir);
 				if (distance > 0) {
 					path.add(Integer.toString(distance));
-					pos = move(pos, dir, distance);
+					pos = dir.forwardFrom(pos, distance);
 				} else if ((distance = proceedForward(pos, dir.turnLeft())) > 0) {
 					path.add("L");
 					path.add(Integer.toString(distance));
 					dir = dir.turnLeft();
-					pos = move(pos, dir, distance);
+					pos = dir.forwardFrom(pos, distance);
 				} else if ((distance = proceedForward(pos, dir.turnRight())) > 0) {
 					path.add("R");
 					path.add(Integer.toString(distance));
 					dir = dir.turnRight();
-					pos = move(pos, dir, distance);
+					pos = dir.forwardFrom(pos, distance);
 				} else {
 					// no where to go but back - since this path is all one line, we're at the end
 					break;
@@ -241,19 +241,6 @@ public class Day17 {
 			}
 
 			return path;
-		}
-
-		private MapLocation move(MapLocation pos, Direction dir, int distance) {
-			if (dir == Direction.DOWN) {
-				return pos.moveDown(distance);
-			} else if (dir == Direction.UP) {
-				return pos.moveUp(distance);
-			} else if (dir == Direction.RIGHT) {
-				return pos.moveRight(distance);
-			} else {
-				assert dir == Direction.LEFT;
-				return pos.moveLeft(distance);
-			}
 		}
 
 		private int proceedForward(MapLocation pos, Direction dir) {
@@ -273,47 +260,6 @@ public class Day17 {
 					count++;
 
 			return count;
-		}
-	}
-
-	public static void main(String[] args) {
-		try {
-			ScaffoldingMapBuilder scaffoldingMap = new ScaffoldingMapBuilder();
-			List<Long> instructions = IntcodeComputer.parse(INPUT);
-			var intcodeComputer = new IntcodeComputer(instructions, new EmptyIntcodeComputerInput(), scaffoldingMap);
-			intcodeComputer.run();
-			
-			long sumOfAlignmentParameters = scaffoldingMap.getIntersections().stream()
-					.mapToLong(ScaffoldingMapBuilder::alignmentParameter).sum();
-			System.out.println("Day 17 part 1: " + sumOfAlignmentParameters);
-
-			String[] solution = build(scaffoldingMap.getCompleteRobotPath(), new ArrayList<>(), new ArrayList<>(),
-					new ArrayList<>(), new ArrayList<>()); // .findPaths();
-			//@formatter:off
-			String input = join(",", solution[0]) + "\n"
-					 + join(",", solution[1]) + "\n"
-					 + join(",", solution[2]) + "\n"
-					 + join(",", solution[3]) + "\n"
-					 + "n\n";
-			//@formatter:on
-			Iterator<Long> inputIterator = input.chars().mapToLong(i -> (long) i).iterator();
-			instructions.set(0, 2L);
-			new IntcodeComputer(instructions, inputIterator, new IntcodeOutput() {
-				@Override
-				public void put(long aVal) {
-					if (aVal > 255) {
-						System.out.print("Day 17 part 2: " + aVal);
-					}
-
-					// debug output
-//					else {
-//						System.out.print((char) aVal);
-//					}
-				}
-			}).run();
-
-		} catch (IntcodeException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -409,4 +355,44 @@ public class Day17 {
 		return true;
 	}
 
+	public static void main(String[] args) {
+		try {
+			ScaffoldingMapBuilder scaffoldingMap = new ScaffoldingMapBuilder();
+			List<Long> instructions = IntcodeComputer.parse(INPUT);
+			var intcodeComputer = new IntcodeComputer(instructions, new EmptyIntcodeComputerInput(), scaffoldingMap);
+			intcodeComputer.run();
+
+			long sumOfAlignmentParameters = scaffoldingMap.getIntersections().stream()
+					.mapToLong(ScaffoldingMapBuilder::alignmentParameter).sum();
+			System.out.println("Day 17 part 1: " + sumOfAlignmentParameters);
+
+			String[] solution = build(scaffoldingMap.getCompleteRobotPath(), new ArrayList<>(), new ArrayList<>(),
+					new ArrayList<>(), new ArrayList<>()); // .findPaths();
+			//@formatter:off
+			String input = join(",", solution[0]) + "\n"
+					 + join(",", solution[1]) + "\n"
+					 + join(",", solution[2]) + "\n"
+					 + join(",", solution[3]) + "\n"
+					 + "n\n";
+			//@formatter:on
+			Iterator<Long> inputIterator = input.chars().mapToLong(i -> (long) i).iterator();
+			instructions.set(0, 2L);
+			new IntcodeComputer(instructions, inputIterator, new IntcodeOutput() {
+				@Override
+				public void put(long aVal) {
+					if (aVal > 255) {
+						System.out.print("Day 17 part 2: " + aVal);
+					}
+
+					// final video output of solution
+//					else {
+//						System.out.print((char) aVal);
+//					}
+				}
+			}).run();
+
+		} catch (IntcodeException e) {
+			e.printStackTrace();
+		}
+	}
 }

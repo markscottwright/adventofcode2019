@@ -1,7 +1,5 @@
 package com.markscottwright.adventofcode2019;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
