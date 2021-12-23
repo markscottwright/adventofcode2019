@@ -75,8 +75,10 @@ public class Day18 {
 			}
 
 			for (Character start : locations.keySet()) {
+				if (isDoor(start))
+					continue;
 				for (Character end : locations.keySet()) {
-					if (start == end || isDoor(start) || isDoor(end))
+					if (start == end || isDoor(end))
 						continue;
 
 					MapPoint endPosition = locations.get(end);
@@ -156,14 +158,13 @@ public class Day18 {
 
 			@Override
 			public String toString() {
-				return "RouteSolution [endpoint=" + endpoint + ", length=" + length + ", remainingLength="
-						+ remainingLength + ", keys=" + keys + ", order=" + getKeyOrder() + "]";
+				return "RouteSolution [endpoint=" + endpoint + ", length=" + length + ", keys=" + keys + ", order="
+						+ getKeyOrder() + "]";
 			}
 
 			private Set<Character> keys;
 			private RouteSolution previous;
 			private int length;
-			private int remainingLength;
 
 			public RouteSolution(Character endpoint, Set<Character> keys, RouteSolution previous, int length) {
 				this.endpoint = endpoint;
@@ -173,12 +174,11 @@ public class Day18 {
 
 				var remainingKeys = new HashSet<Character>(allKeys);
 				remainingKeys.removeAll(keys);
-				this.remainingLength = 0; // worstRouteIncluding(endpoint, remainingKeys);
 			}
 
 			@Override
 			public int compareTo(RouteSolution o) {
-				return Integer.compare(remainingLength + length, o.remainingLength + o.length);
+				return Integer.compare(length, o.length);
 			}
 
 			public boolean canOpenAllDoors(HashSet<Character> doors) {
@@ -206,34 +206,28 @@ public class Day18 {
 			var frontier = new PriorityQueue<RouteSolution>();
 			frontier.add(start);
 
+			// states to not repeat are position plus a set of keys
 			java.util.Map<Pair<Character, Set<Character>>, Integer> explored = new HashMap<>();
 			explored.put(Pair.of(start.endpoint, start.keys), 0);
 
 			while (!frontier.isEmpty()) {
 				var candidate = frontier.poll();
-				//System.out.println(candidate);
 
 				// done
 				if (candidate.keys.equals(allKeys)) {
-					var solutionLength = candidate.length;
-//					var solution = new ArrayList<RouteSolution>();
-//					while (candidate != null) {
-//						solution.add(candidate);
-//						candidate = candidate.previous;
-//					}
-//					Collections.reverse(solution);
-//					solution.forEach(System.out::println);
-					return solutionLength;
+					return candidate.length;
 				}
 
 				// find next states
 				for (Character key : allKeys) {
+					
+					// already have this key
 					if (candidate.keys.contains(key))
 						continue;
 
 					var distanceAndDoors = distances.get(Pair.of(candidate.endpoint, key));
 					if (candidate.canOpenAllDoors(distanceAndDoors.getRight())) {
-						TreeSet<Character> newCandidateKeys = new TreeSet<>(candidate.keys);
+						var newCandidateKeys = new TreeSet<Character>(candidate.keys);
 						newCandidateKeys.add(key);
 
 						int newDistance = candidate.length + distanceAndDoors.getLeft();
