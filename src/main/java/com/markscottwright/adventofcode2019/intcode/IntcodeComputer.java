@@ -1,5 +1,7 @@
 package com.markscottwright.adventofcode2019.intcode;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collections;
@@ -228,6 +230,16 @@ public class IntcodeComputer {
     public static List<Long> parse(String input) {
         return Arrays.stream(input.split(",")).map(Long::parseLong)
                 .collect(Collectors.toList());
+    }
+    
+    public static List<Long> parseResource(String name) {
+        try {
+            ByteArrayOutputStream instructionBytes = new ByteArrayOutputStream();
+            IntcodeComputer.class.getResourceAsStream(name).transferTo(instructionBytes);
+            return parse(new String(instructionBytes.toByteArray()).strip());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public IntcodeMemory getInstructions() {
