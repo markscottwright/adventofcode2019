@@ -1,10 +1,8 @@
 package com.markscottwright.adventofcode2019;
 
-import java.text.StringCharacterIterator;
 import java.util.Iterator;
 import java.util.List;
 
-import com.markscottwright.adventofcode2019.Day21.IntcodeInputString;
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer;
 import com.markscottwright.adventofcode2019.intcode.IntcodeComputer.IntcodeException;
 
