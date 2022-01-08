@@ -381,7 +381,7 @@ public class Day17 {
 				@Override
 				public void put(long aVal) {
 					if (aVal > 255) {
-						System.out.print("Day 17 part 2: " + aVal);
+						System.out.println("Day 17 part 2: " + aVal);
 					}
 
 					// final video output of solution
