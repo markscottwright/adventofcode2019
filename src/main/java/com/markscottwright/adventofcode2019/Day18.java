@@ -306,7 +306,6 @@ public class Day18 {
 
         static class MultiRouteSolution implements Comparable<MultiRouteSolution> {
             private Set<Character> keys;
-            private MultiRouteSolution previous;
             private int length;
             private List<Character> endpoints;
 
@@ -314,7 +313,6 @@ public class Day18 {
                     MultiRouteSolution previous, int length, HashSet<Character> allKeys) {
                 this.endpoints = endpoints;
                 this.keys = keys;
-                this.previous = previous;
                 this.length = length;
 
                 var remainingKeys = new HashSet<Character>(allKeys);
