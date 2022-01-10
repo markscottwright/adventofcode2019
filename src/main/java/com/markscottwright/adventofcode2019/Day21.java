@@ -174,7 +174,7 @@ public class Day21 {
 		// ..#. -> ?
 		// ...# -> j
 
-		// jump = (d&!c | d&!b | !a) : NOT C T, AND D T, OR T J, NOT B T, AND D T, OR T
+		// jump = (d&!c | d&!b | !a)
 		List<Long> instructions = IntcodeComputer.parse(Util.getInputString("day21.txt"));
 		try {
 			// @formatter:off
@@ -191,19 +191,23 @@ public class Day21 {
 			// @formatter:on
 			new IntcodeComputer(instructions, new IntcodeInputString(springscript), c -> {
 				if (c <= Character.MAX_VALUE) {
-					System.out.append((char) c);
+					// System.out.append((char) c);
 				} else {
 					System.out.println("Day 21 Part 1: " + c);
 				}
 			}).run();
-			
+
+			// same as part 1 but also consider h (two jump away)
+			// jump = (d&h&!c | d&h&!b | !a)
 			// @formatter:off
 			String springscript2 = 
-					"NOT C T\n" 
+					  "NOT C T\n" 
 					+ "AND D T\n" 
+					+ "AND H T\n" 
 					+ "OR T J\n" 
 					+ "NOT B T\n" 
 					+ "AND D T\n" 
+					+ "AND H T\n" 
 					+ "OR T J\n"
 					+ "NOT A T\n" 
 					+ "OR T J\n" 
@@ -211,7 +215,7 @@ public class Day21 {
 			// @formatter:on
 			new IntcodeComputer(instructions, new IntcodeInputString(springscript2), c -> {
 				if (c <= Character.MAX_VALUE) {
-					System.out.append((char) c);
+					//System.out.append((char) c);
 				} else {
 					System.out.println("Day 21 Part 2: " + c);
 				}
