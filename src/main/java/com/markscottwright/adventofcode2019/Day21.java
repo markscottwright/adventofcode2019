@@ -135,62 +135,89 @@ import com.markscottwright.adventofcode2019.intcode.IntcodeComputer.IntcodeExcep
  */
 public class Day21 {
 
-    static public class IntcodeInputString implements Iterator<Long> {
+	static public class IntcodeInputString implements Iterator<Long> {
 
-        private String input;
+		private String input;
 
-        public IntcodeInputString(String input) {
-            this.input = input;
-        }
+		public IntcodeInputString(String input) {
+			this.input = input;
+		}
 
-        int pos = 0;
+		int pos = 0;
 
-        @Override
-        public boolean hasNext() {
-            return pos < input.length();
-        }
+		@Override
+		public boolean hasNext() {
+			return pos < input.length();
+		}
 
-        @Override
-        public Long next() {
-            return (long) input.charAt(pos++);
-        }
-    }
+		@Override
+		public Long next() {
+			return (long) input.charAt(pos++);
+		}
+	}
 
-    public static void main(String[] args) {
-        // #### -> ~J
-        // ###. -> ~j
-        // ##.# -> ~j
-        // ##.. -> ~j
-        // #.## -> j
-        // #.#. -> ~j
-        // #..# -> j
-        // #... -> ?
-        // .###
-        // .##.
-        // .#.#
-        // .#..
-        // ..##
-        // ..#.
-        // ...#
+	public static void main(String[] args) {
+		// jumping skips 3...
+		// #### -> ~J
+		// ###. -> ~j
+		// ##.# -> j
+		// ##.. -> ~j
+		// #.## -> j
+		// #.#. -> ~j
+		// #..# -> j
+		// #... -> ?
+		// .### -> j
+		// .##. -> ?
+		// .#.# -> j
+		// .#.. -> ?
+		// ..## -> j
+		// ..#. -> ?
+		// ...# -> j
 
-        // = !B and D or !A
-        // NOT B J
-        // AND D J
-        // NOT A T
-        // OR T J
-        // WALK
-        List<Long> instructions = IntcodeComputer.parse(Util.getInputString("day21.txt"));
-        String springscript = 
-                "NOT B J\n"
-                + "AND D J\n"
-                + "NOT A T\n"
-                + "OR T J\n"
-                + "WALK\n";
-        try {
-            new IntcodeComputer(instructions, new IntcodeInputString(springscript),
-                    c -> System.out.append((char) c)).run();
-        } catch (IntcodeException e) {
-            e.printStackTrace();
-        }
-    }
+		// jump = (d&!c | d&!b | !a) : NOT C T, AND D T, OR T J, NOT B T, AND D T, OR T
+		List<Long> instructions = IntcodeComputer.parse(Util.getInputString("day21.txt"));
+		try {
+			// @formatter:off
+			String springscript = 
+					"NOT C T\n" 
+					+ "AND D T\n" 
+					+ "OR T J\n" 
+					+ "NOT B T\n" 
+					+ "AND D T\n" 
+					+ "OR T J\n"
+					+ "NOT A T\n" 
+					+ "OR T J\n" 
+					+ "WALK\n";
+			// @formatter:on
+			new IntcodeComputer(instructions, new IntcodeInputString(springscript), c -> {
+				if (c <= Character.MAX_VALUE) {
+					System.out.append((char) c);
+				} else {
+					System.out.println("Day 21 Part 1: " + c);
+				}
+			}).run();
+			
+			// @formatter:off
+			String springscript2 = 
+					"NOT C T\n" 
+					+ "AND D T\n" 
+					+ "OR T J\n" 
+					+ "NOT B T\n" 
+					+ "AND D T\n" 
+					+ "OR T J\n"
+					+ "NOT A T\n" 
+					+ "OR T J\n" 
+					+ "RUN\n";
+			// @formatter:on
+			new IntcodeComputer(instructions, new IntcodeInputString(springscript2), c -> {
+				if (c <= Character.MAX_VALUE) {
+					System.out.append((char) c);
+				} else {
+					System.out.println("Day 21 Part 2: " + c);
+				}
+			}).run();
+		} catch (IntcodeException e) {
+			e.printStackTrace();
+		}
+	}
 }
