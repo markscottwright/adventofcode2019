@@ -18,7 +18,6 @@ public class Day23 {
 		private Long y;
 		HashSet<Long> yValuesSent = new HashSet<>();
 		private Long duplicateY = null;
-		
 
 		public void setInput(long x, long y) {
 //			System.out.println("NAT received: " + x + "," + y);
@@ -163,9 +162,7 @@ public class Day23 {
 			for (int i = 0; i < 50; ++i) {
 				network.put(i, new NIC(i));
 			}
-			for (int i = 0; i < 50; ++i) {
-				network.get(i).setNics(network);
-			}
+			network.values().forEach(v -> v.setNics(network));
 			outer: while (true) {
 				for (int i = 0; i < 50; ++i) {
 					if (network.get(i).runOneInstruction()) {
@@ -185,13 +182,9 @@ public class Day23 {
 			for (int i = 0; i < 50; ++i) {
 				network.put(i, new NIC(i, nat));
 			}
-			for (int i = 0; i < 50; ++i) {
-				network.get(i).setNics(network);
-			}
+			network.values().forEach(v -> v.setNics(network));
 			outer: while (true) {
-				for (int i = 0; i < 50; ++i) {
-					network.get(i).runOneInstruction();
-				}
+				network.values().forEach(NIC::runOneInstruction);
 				if (nat.hasValue() && NIC.allFailingToReceive(network)) {
 					nat.send(network.get(0));
 				}
