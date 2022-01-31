@@ -24,5 +24,7 @@ public class AllDays {
         Day19.main(args);
         Day20.main(args);
         Day21.main(args);
+        Day22.main(args);
+        Day23.main(args);
     }
 }
